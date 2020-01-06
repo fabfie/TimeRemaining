@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="prop-export.png">
+  <style>
+
+  p {
+    font-size: 2rem;
+    margin-top: 0;
+  }
+
+  meter {
+  	width: 50%;
+    --error: 14399;
+    --warning: 14400;
+    --ok: 18000;
+  }
+
+  img { animation: rotations 60s infinite linear; }
+
+  meter::-webkit-meter-bar {
+    background: url(HTML_meterSeparator.png), rgb(64,64,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+  }
+
+  meter::-webkit-meter-even-less-good-value {
+    background: url(HTML_meterSeparator.png), rgb(192,128,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+  }
+
+  meter::-webkit-meter-optimum-value {
+    background: url(HTML_meterSeparator.png), rgb(192,192,192) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+    border-right: 1px solid white;
+  }
+
+  meter::-webkit-meter-suboptimum-value {
+    background: url(HTML_meterSeparator.png), rgb(64,192,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+  }
+
+  @keyframes rotations {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+  }
+
+  </style>
+</head>
+<body>
+
+  <meter min="0" max="32400" low="14399" optimum="14400" high="18000" id="timeRemainingBar"></meter>
+  <p>
+  	<code id="time"></code>
+  	<code><sub id="seconds"></sub></code>
+  </p>
+  <img src="prop-export.png" alt="logo" class="logotime">
+  <script>
+    // Set the date we're counting down to
+    var countDownTime = "18:00:00";
+    var countDownDate = new Date(`Jan 6, 2020 ${countDownTime}`).getTime();
+    var expiredMessage = "EXPIRED"
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+
+      // Get today's date and time
+      var now = new Date().getTime();
+        
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+        
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      var totalSeconds = Math.floor(distance / 1e3);
+        
+      // Output the result in an element with id="demo"
+      document.getElementById("timeRemainingBar").value = totalSeconds;
+      document.getElementById("time").innerHTML = 
+      	hours + 
+        ":" + 
+        ("0" + minutes).slice(-2) + 
+        ":" + 
+        ("0" + seconds).slice(-2);
+      document.getElementById("seconds").innerHTML = `(${totalSeconds})`;
+
+      document.getElementById("timeRemainingBar").setAttribute("style", "width: "+ 32400 / 60 + "px");
+        
+      // If the count down is over, write some text 
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("time").innerHTML = expiredMessage;
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>

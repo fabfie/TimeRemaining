@@ -2,60 +2,62 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="prop-export.png">
+  <link rel="icon" type="image/png" href="kisspng-hourglass-icon-vector-hourglass-5a8500ed380497.4763345215186659652295-export.png">
   <style>
 
-  p {
-    font-size: 2rem;
-    margin-top: 0;
-  }
+    p {
+      margin: 0;
+    }
+    .bigger {
+      font-size: 2rem;
+    }
 
-  meter {
-  	width: 50%;
-    --error: 14399;
-    --warning: 14400;
-    --ok: 18000;
-  }
+    meter {
+      height: 2rem;
+      border: 2px solid rgba(0,0,0,.25);
+    }
 
-  img { animation: rotations 60s infinite linear; }
+    img.hour { animation: rotations 3600s infinite linear; }
+    img.minute { animation: rotations 60s infinite linear; }
+    img.second { animation: rotations 1s infinite linear; }
 
-  meter::-webkit-meter-bar {
-    background: url(HTML_meterSeparator.png), rgb(64,64,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
-  }
+    meter::-webkit-meter-bar {
+      background: url(HTML_meterSeparator.png), rgb(64,64,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+    }
 
-  meter::-webkit-meter-even-less-good-value {
-    background: url(HTML_meterSeparator.png), rgb(192,128,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
-  }
+    meter::-webkit-meter-optimum-value {
+      background: url(HTML_meterSeparator.png), rgb(192,192,192) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+      border-right: 1px solid white;
+    }
 
-  meter::-webkit-meter-optimum-value {
-    background: url(HTML_meterSeparator.png), rgb(192,192,192) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
-    border-right: 1px solid white;
-  }
+    meter::-webkit-meter-suboptimum-value {
+      background: url(HTML_meterSeparator.png), rgb(192,128,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
+    }
 
-  meter::-webkit-meter-suboptimum-value {
-    background: url(HTML_meterSeparator.png), rgb(64,192,64) linear-gradient(transparent, rgba(255,255,255,.6), rgba(255,255,255,.2), transparent, transparent);
-  }
-
-  @keyframes rotations {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
-  }
-
+    @keyframes rotations {
+      from {transform: rotate(0deg);}
+      to {transform: rotate(360deg);}
+    }
   </style>
 </head>
 <body>
 
-  <meter min="0" max="32400" low="14399" optimum="14400" high="18000" id="timeRemainingBar"></meter>
-  <p>
-  	<code id="time"></code>
-  	<code><sub id="seconds"></sub></code>
-  </p>
-  <img src="prop-export.png" alt="logo" class="logotime">
+  <meter min="0" max="32400" low="14399" optimum="14400" id="timeRemainingBar"></meter>
+  
+  <p><code id="time" class="bigger"></code></p>
+
+  <p><code><sub id="seconds"></sub></code></p>
+  
+  <img src="prop-export.png" alt="logo" class="logotime hour">
+  <img src="prop-export.png" alt="logo" class="logotime minute">
+  <img src="prop-export.png" alt="logo" class="logotime second">
+
   <script>
     // Set the date we're counting down to
     var countDownTime = "18:00:00";
-    var countDownDate = new Date(`Jan 6, 2020 ${countDownTime}`).getTime();
-    var expiredMessage = "EXPIRED"
+    var today = new Date();
+    var countDownDate = new Date(`${String(today).substring(4, 7)} ${today.getDate()} ${today.getFullYear()} ${countDownTime}`).getTime();
+    var expiredMessage = "The day is done.";
 
     // Update the count down every 1 second
     var x = setInterval(function() {
@@ -75,20 +77,28 @@
         
       // Output the result in an element with id="demo"
       document.getElementById("timeRemainingBar").value = totalSeconds;
-      document.getElementById("time").innerHTML = 
-      	hours + 
+      document.getElementById("time").innerHTML = hours > 0 ? hours + 
         ":" + 
         ("0" + minutes).slice(-2) + 
         ":" + 
-        ("0" + seconds).slice(-2);
+        ("0" + seconds).slice(-2) : 
+          (minutes > 0 ? 
+            minutes + ":" + 
+            ("0" + seconds).slice(-2) : 
+            seconds);
       document.getElementById("seconds").innerHTML = `(${totalSeconds})`;
 
       document.getElementById("timeRemainingBar").setAttribute("style", "width: "+ 32400 / 60 + "px");
         
+      if (distance == 180)
+        alert("3 minutes left.");
+      
       // If the count down is over, write some text 
       if (distance < 0) {
         clearInterval(x);
         document.getElementById("time").innerHTML = expiredMessage;
+        document.getElementById("seconds").innerHTML = "";
+        alert("The day is done.");
       }
     }, 1000);
   </script>
